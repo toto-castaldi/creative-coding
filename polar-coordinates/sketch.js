@@ -6,7 +6,6 @@ let theta = 45; //degrees
 let radius = 0;
 let direction = 1; //1 -> INWARDS, 0 -> OUTWARDS  
 let speed;
-let paletteSlider;
 const palette = new Palette();
 
 function setup() {
@@ -14,10 +13,12 @@ function setup() {
 
   angleMode(DEGREES);
 
+  let paletteSelector;
+
   const restart = () => {
     background(BACKGROUND);
     radius = 0;
-    palette.use(paletteSlider.value());
+    palette.use(paletteSelector.value());
   }
 
   speed = createSlider(1, 9, 5, 0);
@@ -25,14 +26,14 @@ function setup() {
   speed.size(WIDTH*0.8);
   speed.input(restart);
 
-  paletteSlider = createSlider(0, palette.values.length - 1, 0, 1);
-  paletteSlider.position((windowWidth - WIDTH) / 2 + WIDTH*0.1, 30);
-  paletteSlider.size(WIDTH*0.8);
-  paletteSlider.input(restart);
-
-  noStroke();
-
+  paletteSelector = palette.createSelector({
+    positionX : (windowWidth - WIDTH) / 2 + WIDTH*0.1,
+    positionY : 30,
+    size : WIDTH*0.8,
+    input : restart
+  });
   
+  noStroke();
 
   restart();
 }
@@ -43,7 +44,7 @@ function draw() {
   let x = cos(theta) * radius;
   let y = sin(theta) * radius;
 
-  let c = palette.gerColor(Math.floor(map(radius, 0, MAX_RADIUS, 0, palette.length() - 1)));
+  let c = palette.mapColor(radius, 0, MAX_RADIUS);
   
   fill(c);
   circle(x,y,20,20); 

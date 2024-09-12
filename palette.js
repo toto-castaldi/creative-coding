@@ -19,7 +19,23 @@ class Palette {
         return this.values[this.currenPaletteIndex].length;
     }
 
-    gerColor(colorIndex) {
+    getColor(colorIndex) {
         return color("#" + this.values[this.currenPaletteIndex][colorIndex]);
+    }
+
+    mapColor(currentValue, minValue, maxValue) {
+        return this.getColor(Math.floor(map(currentValue, minValue, maxValue, 0, palette.length() - 1)));
+    }
+
+    createSelector(conf) {
+        let result = createSelect();
+        for (let i = 0; i < this.values.length; i++) {
+            result.option(`PALETTE ${i}`, i);
+        }
+        if (conf && conf.positionX && conf.positionY) result.position(conf.positionX, conf.positionY);
+        if (conf && conf.size) result.size(conf.size);
+        if (conf && conf.input) result.input(conf.input);
+
+        return result;
     }
 }
