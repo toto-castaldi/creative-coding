@@ -8,6 +8,7 @@ class Palette {
             ["780000","c1121f","fdf0d5","003049","669bbc"]
         ];       
         this.currenPaletteIndex = 0;
+        this.currentColorIndex = 0;
     }
 
     use(index) {
@@ -37,5 +38,15 @@ class Palette {
         if (conf && conf.input) result.input(conf.input);
 
         return result;
+    }
+
+
+    cycleColor() {
+        this.currentColorIndex ++;
+        if (this.currentColorIndex >= this.values[this.currenPaletteIndex].length) this.currentColorIndex = 0;
+    }
+
+    currentColor() {
+        return this.getColor(this.currentColorIndex);
     }
 }

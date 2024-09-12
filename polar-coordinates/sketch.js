@@ -5,7 +5,9 @@ const BACKGROUND = 255;
 let theta = 45; //degrees
 let radius = 0;
 let direction = 1; //1 -> INWARDS, 0 -> OUTWARDS  
-let speed;
+let speedTheta;
+let speedRadius;
+let speedCycleColor;
 const palette = new Palette();
 
 function setup() {
@@ -21,14 +23,24 @@ function setup() {
     palette.use(paletteSelector.value());
   }
 
-  speed = createSlider(1, 9, 5, 0);
-  speed.position((windowWidth - WIDTH) / 2 + WIDTH*0.1, 10);
-  speed.size(WIDTH*0.8);
-  speed.input(restart);
+  speedTheta = createSlider(1, 9, 5, 0);
+  speedTheta.position((windowWidth - WIDTH) / 2 + WIDTH*0.1, 10);
+  speedTheta.size(WIDTH*0.8);
+  speedTheta.input(restart);
+
+  speedRadius = createSlider(1, 9, 5, 0);
+  speedRadius.position((windowWidth - WIDTH) / 2 + WIDTH*0.1, 30);
+  speedRadius.size(WIDTH*0.8);
+  speedRadius.input(restart);
+
+  speedCycleColor = createSlider(1, 9, 5, 0);
+  speedCycleColor.position((windowWidth - WIDTH) / 2 + WIDTH*0.1, 50);
+  speedCycleColor.size(WIDTH*0.8);
+  speedCycleColor.input(restart);
 
   paletteSelector = palette.createSelector({
     positionX : (windowWidth - WIDTH) / 2 + WIDTH*0.1,
-    positionY : 30,
+    positionY : 70,
     size : WIDTH*0.8,
     input : restart
   });
@@ -44,22 +56,23 @@ function draw() {
   let x = cos(theta) * radius;
   let y = sin(theta) * radius;
 
-  let c = palette.mapColor(radius, 0, MAX_RADIUS);
+  if (frameCount % (speedCycleColor.value() * 10) == 0) palette.cycleColor();
+  let c = palette.currentColor();
   
   fill(c);
   circle(x,y,20,20); 
 
-  theta += speed.value();
+  theta += speedTheta.value();
 
   if (direction == 1) {
     if (radius > 0) {
-      radius --
+      radius -= speedRadius.value();
     } else {
       direction = 0;
     }
   } else {
     if (radius < MAX_RADIUS) {
-      radius ++;
+      radius += speedRadius.value();
     } else {
       direction = 1;
     }
